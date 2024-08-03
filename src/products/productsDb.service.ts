@@ -5,6 +5,7 @@ import { Product } from "./product.entity";
 import { Category } from "src/category/category.entity";
 import { v4 as uuidv4 } from 'uuid';
 import * as data from '../data.json';
+import { UpdateProductDto } from "./dto/update-product.dto";
 
 @Injectable()
 export class ProductsDbService {
@@ -53,17 +54,21 @@ export class ProductsDbService {
     }
   }
 
-  async updateProduct(product: {id: string}){
-    const exist = await this.productRepository.findOne({where: {id: product.id}})
-    if(exist){
+   async updateProduct(id: string, product: Partial<UpdateProductDto>) {
+    const exist = await this.productRepository.findOne({ where: { id } });
+    if (exist) {
       try {
-        const newProduct = await this.productRepository.update(exist,product)
-        return ({message: "producto actualizado con exito", newProduct})
+        console.log("Producto existente:", exist);
+        console.log("Producto actualizado:", product);
+        const { category, ...productToUpdate } = product
+        await this.productRepository.update(id, productToUpdate);
+        const updatedProduct = await this.productRepository.findOne({ where: { id } });
+        return { message: "Producto actualizado con éxito", updatedProduct };
       } catch (error) {
-        return ({message: "error al actualizar producto", error})
+        throw new Error('Error al actualizar el producto');
       }
-    }else{
-      return ({message: "producto no existe"})
+    } else {
+      throw new Error('Producto no existe');
     }
   }
 
@@ -81,17 +86,13 @@ export class ProductsDbService {
         return ({message: "producto no existe"})
       }
     }
-  
 
-
-
-
-  async deleteProduct(product: {id: string}){
-    const exist = await this.productRepository.findOne({where: {id: product.id}})
-    if(exist){
+  async deleteProduct(id: string){
+    const productExist = await this.productRepository.findOne({where: {id}})
+    if(productExist){
       try {
-        const newProduct = await this.productRepository.delete(exist)
-        return ({message: "producto eliminado con exito", newProduct})
+        const newProduct = await this.productRepository.delete(productExist)
+        return ( `producto eliminado con exito,  ${id}` )
       } catch (error) {
         return ({message: "error al eliminar producto", error})
       }
@@ -115,7 +116,6 @@ export class ProductsDbService {
       }
       console.log(`Category "${categoryName}" found with ID "${category.id}".`);
 
-      // Verificar si el producto ya existe con el mismo nombre y categoría
       
       
       const existingProduct = await this.productRepository.findOne({

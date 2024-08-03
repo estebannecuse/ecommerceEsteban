@@ -12,13 +12,17 @@ import { OrderModule } from './orders/orders.module';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 import { FilesModule } from './files/files.module';
 import { JwtModule } from '@nestjs/jwt';
+import { CategoryDbService } from './category/categoryDb.service';
+import { ProductsDbService } from './products/productsDb.service';
+import { Product } from './products/product.entity';
+import { Category } from './category/category.entity';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       load: [typeOrmConfig],
-    }),
+    }),TypeOrmModule.forFeature([Product, Category]),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => configService.get('typeorm'),
@@ -36,7 +40,7 @@ import { JwtModule } from '@nestjs/jwt';
       secret: process.env.JWT_SECRET,
     })],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,CategoryDbService,ProductsDbService],
 })
 export class AppModule  {
 }

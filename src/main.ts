@@ -4,7 +4,8 @@ import { GlobalMiddleware } from './middlewareGlobal/global.middleware';
 import { ValidationPipe } from '@nestjs/common';
 import { HttpExceptionFilter } from './exceptions/exceptionHandler';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-
+import { CategoryDbService } from './category/categoryDb.service';
+import { ProductsDbService } from './products/productsDb.service';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
@@ -22,6 +23,10 @@ async function bootstrap() {
   app.use(new GlobalMiddleware().use)
   app.useGlobalPipes(new ValidationPipe({whitelist:true}));
   app.useGlobalFilters(new HttpExceptionFilter());
+  const categorySEed = app.get(CategoryDbService);
+  await categorySEed.seedCategory();
+  const productSeed = app.get(ProductsDbService);
+  await productSeed.seedProducts();
   await app.listen(3000);
 }
 bootstrap();

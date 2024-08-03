@@ -12,12 +12,12 @@ const config = {
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     autoLoadEntities: true,
-    synchronize: true, // cuando arme los archivos de migracion se van a correr de manera automatico ( en prod, hay que tenerlo desactivado )
+    synchronize: true, 
     logging: true,
-    dropSchema:false,
+    dropSchema:true,
     entities: ['dist/**/*.entity{.ts,.js}'],
     migrations: ['dist/migrations/*{.ts,.js}'],
   }
-export default registerAs('typeorm', () => config) // legible para type config module
+export default registerAs('typeorm', () => config) 
 
-export const connectionSource = new DataSource(config as DataSourceOptions) // para las migraciones
+export const connectionSource = new DataSource(config as DataSourceOptions) 

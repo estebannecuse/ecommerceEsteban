@@ -70,20 +70,28 @@ export class UsersDbService {
         }
     }
 
-    async update(id, updateUserDto: CreateUserDto){
+    async update(id, updateUser: CreateUserDto){
         try {
-            return await this.usersRepository.update(id, updateUserDto)
+            const { confirmPassword, ...userToUpdate } = updateUser
+             const userUpdated = await this.usersRepository.update(id, userToUpdate)           
+             return id
         } catch (error) {
             return ({message: error})
         }
     }
     
     async remove(id: string) {
-        const result = await this.usersRepository.delete(id);
-        if (result.affected === 0) {
-            throw new NotFoundException(`User with id ${id} not found`);
+        try {
+            const exist = await this.usersRepository.findOne({where: {id}})
+            if(exist){
+                await this.usersRepository.delete(id)
+                return id
+            }else{
+                return ({message: 'User not found'})
+            }
+        } catch (error) {
+            return ({message: error})
         }
-        return result;
     }
     
     async login(email){

@@ -13,7 +13,7 @@ import { User } from './user.entity';
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersDbService,
+  constructor(
     private readonly usersDbService: UsersDbService,
   ) {}
   
@@ -40,14 +40,21 @@ export class UsersController {
     return response.status(HttpStatus.OK).json(result);
   }
   
-  @ApiBearerAuth()
+
   @Put(':id')
-  @UseGuards(AuthGuard)
-  async update(@Res() response: Response,@Param('id') id: string, @Body() updateUserDto : CreateUserDto) {
-    const userUpdated = await this.usersDbService.update(id, updateUserDto);
-    const data = userUpdated;
-    return response.status(HttpStatus.OK).json(data);
+  @Roles(Role.Admin)
+  @UseGuards(AuthGuard, RolesGuard)
+  @UsePipes(new ValidationPipe({transform: true}))
+  async update(@Param("id")id: string,@Body() updateUser: CreateUserDto) {
+    try {
+      const userUpdated = await this.usersDbService.update(id, updateUser);
+      return userUpdated;
+    } catch (error) {
+      console.error('Error updating user:', error);
+      throw new Error('Error al actualizar el usuario');
+    }
   }
+
 
   @ApiBearerAuth()
   @Delete(':id')

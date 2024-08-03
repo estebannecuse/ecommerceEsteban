@@ -20,12 +20,16 @@ export class OrdersDbService{
 
     async addOrder(userId: string, productIds: string[]): Promise<Order> {
         const user = await this.usersRepository.findOne({ where: { id: userId } });
-        if (!user) {
-            throw new Error("User not found");
+    if (!user) {
+        throw new Error("User not found");
+    }
+        
+    for (const productId of productIds) {
+        const product = await this.productsRepository.findOne({ where: { id: productId } });
+        if (!product) {
+            throw new Error(`Product with id ${productId} not found`);
         }
-        console.log(user);
-        const pruebaDate = new Date().toLocaleString();
-        console.log(pruebaDate);
+    }
         let total = 0;
         const orderDetails: OrderDetails[] = [];
     
@@ -46,6 +50,7 @@ export class OrdersDbService{
     
                 total += Number(product.price);
             }
+
         }
         
         const order = new Order();

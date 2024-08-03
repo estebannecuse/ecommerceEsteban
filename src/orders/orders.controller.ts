@@ -12,6 +12,7 @@ import { Response } from 'express';
 export class OrderController{
     constructor(private readonly ordersDbService: OrdersDbService){}
 
+@ApiBearerAuth()
 @Post('add')
 @UseGuards(AuthGuard)
 async addOrder(@Res() response: Response, @Body() createOrderDto: CreateOrderDto): Promise<any> {

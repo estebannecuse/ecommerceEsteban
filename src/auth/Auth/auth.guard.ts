@@ -15,7 +15,7 @@ export class AuthGuard implements CanActivate {
     if(!authHeader) throw new UnauthorizedException("Bearer token not found");
     const token = authHeader.split(' ')[1];
     if(!token || token === undefined){
-      throw new UnauthorizedException("Bearer token not found");
+      throw new UnauthorizedException("Token not found or undefined");
     }try {
       const secret = process.env.JWT_SECRET;
       const payload =  this.jwtService.verify(token, {secret});

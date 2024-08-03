@@ -12,7 +12,6 @@ export class FilesController {
     private readonly productsDbService: ProductsDbService
   ) {}
 
-  @ApiBearerAuth()
   @Put('/uploadImage/:id')
   @UseInterceptors(FileInterceptor('image'))
   @ApiConsumes('multipart/form-data')

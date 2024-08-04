@@ -2,7 +2,7 @@ import { Controller, FileTypeValidator, MaxFileSizeValidator, NotFoundException,
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FilesDbService } from './filesDb.service';
 import { ProductsDbService } from 'src/products/productsDb.service';
-import { ApiBody, ApiConsumes, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 
 @ApiTags("Files")
 @Controller('files')

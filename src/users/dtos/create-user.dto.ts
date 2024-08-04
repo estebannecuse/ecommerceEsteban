@@ -53,5 +53,8 @@ export class CreateUserDto {
     @IsString()
     @Length(5,20)
     city: string;
+
+    //@IsEmpty() //con este empty se valida que no llegue en la solicitud
+    //isAdmin: boolean;
 }
 

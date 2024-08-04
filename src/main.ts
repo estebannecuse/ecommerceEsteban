@@ -30,8 +30,3 @@ async function bootstrap() {
   await app.listen(3000);
 }
 bootstrap();
-
-
-// importo los modulos y servicios en providers 
-// en una const guardo el servicio 
-// luego del app listen llamo a esa const con un punto y deberia habilitarse las funcionalidades 

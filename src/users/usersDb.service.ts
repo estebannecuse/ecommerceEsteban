@@ -4,6 +4,7 @@ import { Repository } from "typeorm";
 import { User } from "./user.entity";
 import { CreateUserDto } from "./dtos/create-user.dto";
 import { log } from "console";
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersDbService {
@@ -71,9 +72,13 @@ export class UsersDbService {
     }
 
     async update(id, updateUser: CreateUserDto){
+        if(updateUser.password !== updateUser.confirmPassword){
+            throw new BadRequestException('Passwords do not match')
+        }
+        const hashedPass = await bcrypt.hash(updateUser.password, 10)
         try {
             const { confirmPassword, ...userToUpdate } = updateUser
-             const userUpdated = await this.usersRepository.update(id, userToUpdate)           
+             const userUpdated = await this.usersRepository.update(id, {...userToUpdate, password: hashedPass })           
              return id
         } catch (error) {
             return ({message: error})

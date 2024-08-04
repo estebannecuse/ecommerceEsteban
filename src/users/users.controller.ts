@@ -41,6 +41,7 @@ export class UsersController {
   }
   
 
+  @ApiBearerAuth()
   @Put(':id')
   @Roles(Role.Admin)
   @UseGuards(AuthGuard, RolesGuard)

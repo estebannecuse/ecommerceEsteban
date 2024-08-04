@@ -10,7 +10,6 @@ export class CreateProductDto {
     description: string;
 
     @IsNotEmpty()
-    @IsString()
     price: number;
 
     @IsNotEmpty()

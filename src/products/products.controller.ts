@@ -7,9 +7,10 @@ import { AuthGuard } from "src/auth/Auth/auth.guard";
 import { Roles } from "src/decorators/roles.decorator";
 import { RolesGuard } from "src/auth/Auth/roles.guard";
 import { Role } from "src/roles.enum";
-import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
+import { ApiBearerAuth, ApiBody, ApiTags } from "@nestjs/swagger";
 import { Product } from "./product.entity";
 import { UpdateProductDto } from "./dto/update-product.dto";
+import { CreateProductDto } from "./dto/create-product.dto";
 
 
 @ApiTags('Products')
@@ -53,8 +54,10 @@ export class ProductsController {
       }
     }
 
+    
     @Post('add')
-    async addProduct(@Res() response: Response,@Body() product: {name: string}){
+    @UsePipes(new ValidationPipe({transform: true}))
+    async addProduct(@Res() response: Response,@Body() product: CreateProductDto){
       try {
         const newProduct = await this.productsDbService.addProduct(product);
         return response.status(HttpStatus.OK).json(newProduct)
@@ -77,8 +80,6 @@ export class ProductsController {
     @UsePipes(new ValidationPipe({transform: true}))
     async updateProduct(@Res() response: Response, @Param('id') id: string, @Body() product: UpdateProductDto){
       try {
-        console.log("1. id controller", id);
-        console.log("2. product controller", product);
         const updatedProduct = await this.productsDbService.updateProduct(id, product);
         return response.status(HttpStatus.OK).json(updatedProduct)
       } catch (error) {

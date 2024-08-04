@@ -8,7 +8,7 @@ import { Order } from 'src/orders/orders.entity';
 import { OrderDetails } from 'src/orderDetails/orderDetails.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User]), Product, Order, OrderDetails], //construye un modulo de typeorm a partir de la entidad de usuarios
+  imports: [TypeOrmModule.forFeature([User]), Product, Order, OrderDetails],
   controllers: [UsersController],
   providers: [UsersDbService],
   exports:[UsersDbService]

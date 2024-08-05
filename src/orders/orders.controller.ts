@@ -6,7 +6,7 @@ import { ApiBearerAuth, ApiTags } from "@nestjs/swagger";
 import { CreateOrderDto } from "./dtos/create-order.dto";
 import { Response } from 'express';
 
-
+@ApiBearerAuth()
 @ApiTags("Orders")
 @Controller('orders')
 export class OrderController{

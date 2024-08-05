@@ -52,16 +52,13 @@ export class OrdersDbService{
             }
 
         }
+        const { password, isAdmin, ...userWithoutPassword } = user;
         
         const order = new Order();
-        order.user = user;
+        order.user = userWithoutPassword;
         order.total = parseFloat(total.toFixed(2));
         order.date = new Date().toLocaleString();
-        order.orderDetails = orderDetails;
-        
-        console.log(order);
-        console.log(order);
-        
+        order.orderDetails = orderDetails;   
         
         return this.ordersRepository.save(order);
         

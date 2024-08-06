@@ -29,7 +29,7 @@ export class AuthService {
       throw new BadRequestException(result.message);
     }
 
-    const { password, ...userWithOutPass } = result.newUser;
+    const { password, confirmPassword, ...userWithOutPass } = result.newUser;
     return userWithOutPass;
   }
 

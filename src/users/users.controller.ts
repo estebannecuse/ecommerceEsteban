@@ -15,6 +15,7 @@ import { User } from './user.entity';
 export class UsersController {
   constructor(
     private readonly usersDbService: UsersDbService,
+    
   ) {}
   
   @ApiBearerAuth()
@@ -46,7 +47,7 @@ export class UsersController {
   @Roles(Role.Admin)
   @UseGuards(AuthGuard, RolesGuard)
   @UsePipes(new ValidationPipe({transform: true}))
-  async update(@Param("id")id: string,@Body() updateUser: CreateUserDto) {
+  async update(@Param("id") id: string,@Body() updateUser: CreateUserDto) {
     try {
       const userUpdated = await this.usersDbService.update(id, updateUser);
       return userUpdated;
